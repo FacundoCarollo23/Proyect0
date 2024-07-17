@@ -22,10 +22,11 @@ export class HomeComponent implements OnInit {
   }
   transcript: string = '';
   ngOnInit() {
+    this.startListening()
     this.voiceService.onResult((transcript: string) => {
       this.transcript = transcript;
     });
-
+   
     this.voiceService.onError((event: any) => {
       console.error(event.error);
     });
@@ -35,9 +36,7 @@ export class HomeComponent implements OnInit {
     this.voiceService.startRecognition();
   }
 
-  stopListening() {
-    this.voiceService.stopRecognition();
-  }
+ 
   
 
 }

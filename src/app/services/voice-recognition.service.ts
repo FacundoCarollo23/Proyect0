@@ -60,12 +60,20 @@ export class VoiceRecognitionService {
     }
   
     public onResult(callback: (transcript: string) => void): void {
+      let isHandled = false;
       if (this.isRecognitionAvailable) {
         this.recognition.onresult = (event: any) => {
-          const lastResultIndex = event.results.length - 1;
-          const transcript = event.results[lastResultIndex][0].transcript;
-          console.log('Transcripción:', transcript); // Aquí se muestra lo que dices en la consola
-          callback(transcript);
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const result = event.results[i];
+            if (result.isFinal) {
+                // Obtén la transcripción completa del resultado final
+                const transcript = result[0].transcript;
+                console.log('Transcripción:', transcript); // Aquí se muestra lo que dices en la consola
+                callback(transcript);
+                this.stopRecognition();
+                break; // Sale del bucle una vez que se encuentra un resultado final
+            }
+        }
         };
       } else {
         console.error('Web Speech API no está disponible.');

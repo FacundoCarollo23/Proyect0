@@ -33,14 +33,11 @@ export class HomeComponent implements OnInit {
   }
 
   startListening() {
-    let lastResultIndex : any [] = [];
     this.voiceService.startRecognition();
     this.voiceService.onResult((transcript: any) => {
     this.transcript = transcript;
-    lastResultIndex.push(transcript);
     this.speak();
     });
-    console.log(lastResultIndex)
     this.voiceService.onError((event: any) => {
      this.voiceService.stopRecognition();
     });
